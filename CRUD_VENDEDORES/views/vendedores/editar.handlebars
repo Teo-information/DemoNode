@@ -1,0 +1,32 @@
+<h2>Editar Vendedor</h2>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/vendedores/editar/{{vendedor.id}}" method="POST">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="{{vendedor.nombre}}" required>
+      </div>
+      
+      <div class="mb-3">
+        <label for="direccion" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="direccion" name="direccion" value="{{vendedor.direccion}}" required>
+      </div>
+      
+      <div class="mb-3">
+        <label for="telefono" class="form-label"></label>
+        <input type="text" class="form-control" id="telefono" name="telefono" value="{{vendedor.telefono}}" required>
+      </div>
+      
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{vendedor.email}}" required>
+      </div>
+      
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="/vendedores" class="btn btn-secondary me-md-2">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</div>
