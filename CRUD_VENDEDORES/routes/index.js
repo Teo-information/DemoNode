@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-// Ruta principal
+// Redirect the root URL to the vendors list
 router.get('/', (req, res) => {
-  res.render('index', { titulo: 'Sistema de Gestión de Vendedores' });
+    res.redirect('/vendedores');
 });
 
 module.exports = router;

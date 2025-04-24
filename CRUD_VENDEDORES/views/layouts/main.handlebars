@@ -1,45 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRUD Vendedores - {{#if titulo}}{{titulo}}{{else}}Sistema de Gestión{{/if}}</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="utf-8">
+    <title>Gestión de Vendedores</title>
+    <link rel="stylesheet" href="/styles.css"> {{!-- Link to your CSS file --}}
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="/">CRUD Vendedores</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/vendedores">Vendedores</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/vendedores/crear">Nuevo Vendedor</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  
-  <div class="container mt-4">
-    {{{body}}}
-  </div>
+    <header>
+        <h1>Gestión de Vendedores</h1>
+        <nav>
+            <a href="/vendedores">Listar Vendedores</a>
+            <a href="/vendedores/crear">Crear Vendedor</a>
+        </nav>
+    </header>
 
-  <footer class="footer mt-5 py-3 bg-light">
-    <div class="container text-center">
-      <span class="text-muted">CRUD Vendedores &copy; {{año}}</span>
-    </div>
-  </footer>
+    <main>
+        {{{body}}} {{!-- This is where the content of other views will be inserted --}}
+    </main>
 
-  <script src="/js/bootstrap.bundle.min.js"></script>
+    <footer>
+        <p>&copy; {{currentYear}} Mi Aplicación CRUD</p>
+    </footer>
 </body>
 </html>

@@ -1,32 +1,41 @@
 <h2>Editar Vendedor</h2>
 
-<div class="card">
-  <div class="card-body">
-    <form action="/vendedores/editar/{{vendedor.id}}" method="POST">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" value="{{vendedor.nombre}}" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="direccion" class="form-label">Apellido</label>
-        <input type="text" class="form-control" id="direccion" name="direccion" value="{{vendedor.direccion}}" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="telefono" class="form-label"></label>
-        <input type="text" class="form-control" id="telefono" name="telefono" value="{{vendedor.telefono}}" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{vendedor.email}}" required>
-      </div>
-      
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="/vendedores" class="btn btn-secondary me-md-2">Cancelar</a>
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-      </div>
+{{!-- Check if vendor data was passed to the view --}}
+{{#if vendedor}}
+    <form action="/vendedores/editar" method="POST">
+        {{!-- Hidden input for the vendor ID --}}
+        <input type="hidden" name="id_ven" value="{{vendedor.id_ven}}">
+
+        <div>
+            <label for="nom_ven">Nombre:</label>
+            <input type="text" id="nom_ven" name="nom_ven" value="{{vendedor.nom_ven}}" required>
+        </div>
+        <div>
+            <label for="ape_ven">Apellido:</label>
+            <input type="text" id="ape_ven" name="ape_ven" value="{{vendedor.ape_ven}}" required>
+        </div>
+         <div>
+            <label for="id_dis">Distrito ID:</label>
+            {{!-- Ideally, this would be a dropdown populated with districts --}}
+            {{!-- For simplicity now, use a number input and pre-populate the current ID. --}}
+             <input type="number" id="id_dis" name="id_dis" value="{{vendedor.id_dis}}" required>
+             {{!-- Example of a dropdown (requires passing 'distritos' array and the current 'vendedor.id_dis' to the view): --}}
+             {{!--
+            <select id="id_dis" name="id_dis" required>
+                <option value="">Seleccione un Distrito</option>
+                {{#each distritos}}
+                    <option value="{{id_dis}}" {{#if (eq id_dis ../vendedor.id_dis)}}selected{{/if}}>{{nom_dis}}</option>
+                {{/each}}
+            </select>
+            --}}
+        </div>
+        <div>
+            <label for="cel_ven">Celular:</label>
+            <input type="text" id="cel_ven" name="cel_ven" value="{{vendedor.cel_ven}}" required>
+        </div>
+        <button type="submit">Actualizar Vendedor</button>
+        <a href="/vendedores">Cancelar</a>
     </form>
-  </div>
-</div>
+{{else}}
+    <p>No se pudo cargar la información del vendedor.</p>
+{{/if}}

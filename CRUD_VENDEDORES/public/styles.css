@@ -1,0 +1,308 @@
+/* public/styles.css - Versión Minimalista y Natural */
+
+:root {
+    /* Paleta de Colores Naturales/Minimalistas */
+    --color-background: #f8f9fa; /* Blanco roto o gris muy claro */
+    --color-text-primary: #343a40; /* Gris oscuro casi negro */
+    --color-text-secondary: #6c757d; /* Gris medio para texto secundario */
+    --color-border: #dee2e6; /* Gris claro para bordes y líneas */
+    --color-primary: #007bff; /* Azul neutro para acciones principales/headers */
+    --color-primary-hover: #0056b3;
+    --color-success: #28a745; /* Verde para éxito/crear */
+    --color-success-hover: #218838;
+    --color-warning: #ffc107; /* Amarillo para editar */
+    --color-warning-hover: #e0a800;
+    --color-danger: #dc3545; /* Rojo para eliminar */
+    --color-danger-hover: #c82333;
+    --color-light: #e9ecef; /* Gris muy claro para fondos sutiles */
+}
+
+body {
+    font-family: 'Arial', sans-serif; /* Fuente simple y legible */
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6; /* Mejorar legibilidad con espaciado de línea */
+}
+
+header {
+    background-color: var(--color-text-primary); /* Fondo oscuro sutil */
+    color: var(--color-background); /* Texto claro */
+    padding: 15px 20px; /* Un poco más de padding */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra muy suave */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em; /* Tamaño de título */
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    color: var(--color-background);
+    text-decoration: none;
+    margin: 0 10px;
+    opacity: 0.9; /* Ligeramente transparente por defecto */
+    transition: opacity 0.3s ease; /* Transición suave */
+}
+
+nav a:hover {
+    text-decoration: none; /* No subrayar al pasar el ratón */
+    opacity: 1; /* Opacidad completa al pasar el ratón */
+}
+
+main {
+    padding: 20px;
+    max-width: 1000px; /* Ancho máximo para contenido principal */
+    margin: 20px auto; /* Centrar el contenido */
+    background-color: #fff; /* Fondo blanco para el contenido */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para destacar el área de contenido */
+    border-radius: 8px; /* Bordes redondeados suaves */
+}
+
+h2 {
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border); /* Línea sutil debajo de los títulos */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Estilo para formularios (general) */
+form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--color-light); /* Fondo muy claro para formularios */
+    border-radius: 5px;
+    border: 1px solid var(--color-border); /* Borde ligero */
+}
+
+form div {
+    margin-bottom: 15px; /* Más espacio entre grupos de campos */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px; /* Más espacio debajo de la etiqueta */
+    font-weight: bold;
+    color: var(--color-text-secondary); /* Color de texto secundario para etiquetas */
+    font-size: 0.9em; /* Tamaño de fuente ligeramente más pequeño */
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%; /* Usar el 100% del contenedor padre */
+    padding: 10px 12px; /* Padding interno */
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-sizing: border-box; /* Incluir padding y borde en el ancho */
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--color-primary); /* Borde de color primario al enfocar */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); /* Sombra suave al enfocar */
+    outline: none; /* Eliminar el outline por defecto */
+}
+
+button {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* Estilo específico para el formulario de búsqueda (usando Flexbox) */
+form[action="/vendedores/buscar"] {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten a pantallas pequeñas */
+    align-items: flex-end; /* Alinea los elementos abajo si tienen alturas diferentes */
+    gap: 15px; /* Espacio entre elementos del formulario */
+    padding: 20px; /* Más padding para el formulario de búsqueda */
+}
+
+form[action="/vendedores/buscar"] div {
+     margin-bottom: 0; /* Elimina margen si usas gap en el padre */
+     flex-grow: 1; /* Permite que los inputs crezcan */
+     min-width: 150px; /* Ancho mínimo para cada input */
+}
+
+form[action="/vendedores/buscar"] label {
+    margin-bottom: 5px; /* Espacio entre label e input dentro del div */
+}
+
+form[action="/vendedores/buscar"] input[type="text"],
+form[action="/vendedores/buscar"] input[type="number"] {
+    width: 100%; /* Usar todo el ancho del div contenedor */
+}
+
+form[action="/vendedores/buscar"] button {
+    padding: 10px 20px;
+    /* Los estilos de botón generales ya se aplican */
+}
+
+
+/* Mejoras para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra similar a la del main */
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que los bordes redondeados se apliquen bien */
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    /* border-bottom: 1px solid var(--color-border); /* Usaremos un estilo diferente para las filas */
+}
+
+th {
+    background-color: var(--color-primary); /* Fondo de encabezado con color primario */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em; /* Encabezados un poco más pequeños */
+}
+
+/* Estilo para las filas */
+tbody tr {
+    border-bottom: 1px solid var(--color-border); /* Separador de fila */
+    transition: background-color 0.3s ease;
+}
+
+tbody tr:last-child {
+    border-bottom: none; /* No borde en la última fila */
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--color-background); /* Fondo de color de fondo para filas pares */
+}
+
+tbody tr:hover {
+    background-color: #e9ecef; /* Gris muy claro al pasar el ratón */
+}
+
+td {
+    font-size: 0.95em; /* Tamaño de fuente ligeramente más pequeño para las celdas */
+    color: var(--color-text-primary);
+}
+
+td:last-child { /* Columna de Acciones */
+    text-align: center;
+    white-space: nowrap;
+}
+
+td:last-child a,
+td:last-child form {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+
+/* Estilo para los botones/enlaces de acciones en la tabla */
+td:last-child a { /* Botón Editar */
+    background-color: var(--color-warning); /* Amarillo discreto */
+    color: var(--color-text-primary); /* Texto oscuro */
+    padding: 6px 12px; /* Ajuste de padding */
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85em; /* Tamaño más pequeño */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+td:last-child a:hover {
+    background-color: var(--color-warning-hover);
+    text-decoration: none;
+}
+
+td:last-child form button { /* Botón Eliminar */
+    background-color: var(--color-danger); /* Rojo discreto */
+    color: white;
+    padding: 6px 12px; /* Ajuste de padding */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em; /* Tamaño más pequeño */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+td:last-child form button:hover {
+    background-color: var(--color-danger-hover);
+}
+
+/* Estilo para el enlace "Crear Nuevo Vendedor" (botón principal) */
+main > a[href="/vendedores/crear"] {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: var(--color-success); /* Verde para crear */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+main > a[href="/vendedores/crear"]:hover {
+    background-color: var(--color-success-hover);
+    text-decoration: none;
+}
+
+
+/* Estilo para el pie de página */
+footer {
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    color: var(--color-text-secondary); /* Gris medio */
+    font-size: 0.9em;
+    border-top: 1px solid var(--color-border); /* Línea superior */
+}
+
+/* Estilo para el contenedor de errores (si lo usas) */
+.error-container {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Texto rojo oscuro */
+    border: 1px solid #f5c6cb; /* Borde rojo */
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.error-container h2 {
+    color: #721c24;
+    border-bottom-color: #f5c6cb;
+}

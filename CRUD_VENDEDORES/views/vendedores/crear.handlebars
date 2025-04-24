@@ -1,32 +1,33 @@
 <h2>Crear Nuevo Vendedor</h2>
 
-<div class="card">
-  <div class="card-body">
-    <form action="/vendedores/crear" method="POST">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="direccion" class="form-label">Apellido</label>
-        <input type="text" class="form-control" id="direccion" name="direccion" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="telefono" class="form-label">ID Distrito</label>
-        <input type="text" class="form-control" id="telefono" name="telefono" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="email" class="form-label">Numero de celular</label>
-        <input type="email" class="form-control" id="email" name="email" required>
-      </div>
-      
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="/vendedores" class="btn btn-secondary me-md-2">Cancelar</a>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </div>
-    </form>
-  </div>
-</div>
+<form action="/vendedores/crear" method="POST">
+    <div>
+        <label for="nom_ven">Nombre:</label>
+        <input type="text" id="nom_ven" name="nom_ven" required>
+    </div>
+    <div>
+        <label for="ape_ven">Apellido:</label>
+        <input type="text" id="ape_ven" name="ape_ven" required>
+    </div>
+    <div>
+        <label for="id_dis">Distrito ID:</label>
+        {{!-- Ideally, this would be a dropdown populated with districts --}}
+        {{!-- For simplicity now, use a number input. You'll need to fetch and pass districts to this view. --}}
+        <input type="number" id="id_dis" name="id_dis" required>
+        {{!-- Example of a dropdown (requires passing 'distritos' array to the view): --}}
+        {{!--
+        <select id="id_dis" name="id_dis" required>
+            <option value="">Seleccione un Distrito</option>
+            {{#each distritos}}
+                <option value="{{id_dis}}">{{nom_dis}}</option>
+            {{/each}}
+        </select>
+        --}}
+    </div>
+    <div>
+        <label for="cel_ven">Celular:</label>
+        <input type="text" id="cel_ven" name="cel_ven" required>
+    </div>
+    <button type="submit">Guardar Vendedor</button>
+    <a href="/vendedores">Cancelar</a>
+</form>

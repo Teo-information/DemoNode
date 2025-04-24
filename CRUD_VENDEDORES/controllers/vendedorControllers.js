@@ -1,134 +1,83 @@
-const VendedorModel = require('../models/vendedor');
-// ASUMO que tienes (o crearás) un modelo para manejar los distritos
-// const DistritoModel = require('../models/distrito');
+const pool = require('../config/database'); // Import the promise pool
 
-class VendedorController {
-    // Mostrar todos los vendedores
-    static async listarVendedores(req, res) {
-        try {
-            // Asumiendo que obtenerTodos también trae la información del distrito para mostr
-            const vendedores = await VendedorModel.obtenerTodos();
-            res.render('vendedores/listar', { vendedores });
-        } catch (error) {
-            console.error('Error en controlador al listar vendedores:', error);
-            res.status(500).render('error', { mensaje: 'Error al obtener la lista de vendedores' });
-        }
+// 1. Listar vendedores (sp_selven)FUNCIONA
+exports.listarVendedores = async (req, res) => {
+    try {
+        // Use await with pool.query
+        const [results] = await pool.query('CALL sp_selven()');
+        // results will be an array where the first element is the result set(s)
+        res.render('vendedores/listar', { vendedores: results[0] });
+    } catch (err) {
+        console.error("Error al listar vendedores:", err);
+        // Assuming you have an error view
+        res.render('vendedores/error', { mensaje: 'Error al listar vendedores', error: err });
+        // Or if using the error middleware: next(err);
     }
+};
 
-    // Mostrar formulario para crear vendedor
-    static async mostrarFormularioCrear(req, res) {
-        try {
-            // *** MODIFICACIÓN AQUÍ: Obtener la lista de distritos ***
-            // Necesitas un método en tu modelo (VendedorModel o DistritoModel)
-            // para obtener todos los distritos.
-            const distritos = await VendedorModel.obtenerDistritos(); // O await DistritoModel.obtenerTodos();
+// 2. Buscar vendedor por ID o nombre (sp_busven)FUNCIONA
+exports.buscarVendedor = async (req, res) => {
+    const { id_ven, nom_ven } = req.body;
 
-            res.render('vendedores/crear', { distritos }); // Pasar los distritos a la vista
-        } catch (error) {
-            console.error('Error en controlador al mostrar formulario para crear:', error);
-            res.status(500).render('error', { mensaje: 'Error al cargar el formulario de creación de vendedor' });
-        }
+    // Intentar convertir id_ven a entero si existe, de lo contrario usar null
+    const idVendedor = id_ven ? parseInt(id_ven, 10) : null;
+    const nombreVendedor = nom_ven || null;
+
+    try {
+        // Use await with pool.query
+        const [results] = await pool.query('CALL sp_busven(?, ?)', [idVendedor, nombreVendedor]);
+         // results will be an array where the first element is the result set(s)
+        res.render('vendedores/listar', { vendedores: results[0] });
+    } catch (err) {
+        console.error("Error al buscar vendedor:", err);
+         // Assuming you have an error view
+        res.render('vendedores/error', { mensaje: 'Error al buscar vendedor', error: err });
+        // Or if using the error middleware: next(err);
     }
+};
 
-    // Procesar la creación de un vendedor
-    static async crearVendedor(req, res) {
-        try {
-            // *** MODIFICACIÓN AQUÍ: Capturar apellido e id_distrito y mapear a columnas de la tabla ***
-            const nuevoVendedor = {
-                nom_ven: req.body.nombre, // Mapea 'nombre' del formulario a 'nom_ven'
-                ape_ven: req.body.apellido, // Captura 'apellido' del formulario (NECESITA AGREGARSE AL FORMULARIO)
-                id_dis: req.body.id_distrito, // Captura 'id_distrito' del formulario (NECESITA AGREGARSE AL FORMULARIO)
-                cel_ven: req.body.telefono, // Mapea 'telefono' del formulario a 'cel_ven'
-                // 'direccion' y 'email' se eliminan ya que no están en la tabla Vendedores
-            };
-
-            // *** Consideración sobre el error 'Data too long' ***
-            // Aunque aquí capturamos el teléfono, el error indica que el VALOR específico
-            // que se intenta insertar en la base de datos es el problema.
-            // Asegúrate de que req.body.telefono no tenga más de 9 caracteres si mantienes CHAR(9),
-            // o modifica la columna a VARCHAR(20) o más en la base de datos como sugerí antes.
-            console.log("Datos del nuevo vendedor a enviar al modelo:", nuevoVendedor); // Opcional: para depurar
-
-            await VendedorModel.crear(nuevoVendedor);
-            res.redirect('/vendedores');
-        } catch (error) {
-            console.error('Error en controlador al crear vendedor:', error);
-            // Puedes intentar pasar los datos que el usuario ingresó para que no los pierda en caso de error
-            res.status(500).render('error', {
-                mensaje: 'Error al crear el vendedor',
-                // Opcional: pasar datos para rellenar el formulario en caso de error
-                // datosAnteriores: req.body
-            });
-        }
+// 3. Insertar vendedor (sp_ingven)FUNCIONA
+exports.crearVendedor = async (req, res) => {
+    const { nom_ven, ape_ven, id_dis, cel_ven } = req.body;
+    try {
+        // Use await with pool.query
+        await pool.query('CALL sp_ingven(?, ?, ?, ?)', [nom_ven, ape_ven, id_dis, cel_ven]);
+        res.redirect('/vendedores'); // Redirect after successful insertion
+    } catch (err) {
+        console.error("Error al crear vendedor:", err);
+        // Assuming you have an error view
+        res.render('vendedores/error', { mensaje: 'Error al crear vendedor', error: err });
+         // Or if using the error middleware: next(err);
     }
+};
 
-    // Mostrar formulario para editar vendedor
-    static async mostrarFormularioEditar(req, res) {
-        try {
-            const id = req.params.id;
-            // Asumiendo que obtenerPorId también trae la información del distrito si la necesitas
-            const vendedor = await VendedorModel.obtenerPorId(id);
-
-            if (!vendedor) {
-                return res.status(404).render('error', { mensaje: 'Vendedor no encontrado' });
-            }
-
-            // *** MODIFICACIÓN AQUÍ: Obtener la lista de distritos también para el formulario de edición ***
-            const distritos = await VendedorModel.obtenerDistritos(); // O await DistritoModel.obtenerTodos();
-
-
-            res.render('vendedores/editar', { vendedor, distritos }); // Pasar distritos a la vista de edición
-        } catch (error) {
-            console.error('Error en controlador al mostrar formulario de edición:', error);
-            res.status(500).render('error', { mensaje: 'Error al obtener datos del vendedor' });
-        }
+// 4. Modificar vendedor (sp_modven)
+exports.editarVendedor = async (req, res) => {
+    // Assuming the form submits id_ven in the body
+    const { id_ven, nom_ven, ape_ven, id_dis, cel_ven } = req.body;
+     try {
+        // Use await with pool.query
+        await pool.query('CALL sp_modven(?, ?, ?, ?, ?)', [id_ven, nom_ven, ape_ven, id_dis, cel_ven]);
+        res.redirect('/vendedores'); // Redirect after successful update
+    } catch (err) {
+        console.error("Error al modificar vendedor:", err);
+        // Assuming you have an error view
+        res.render('vendedores/error', { mensaje: 'Error al modificar vendedor', error: err });
+         // Or if using the error middleware: next(err);
     }
+};
 
-    // Procesar la actualización de un vendedor
-    static async actualizarVendedor(req, res) {
-        try {
-            const id = req.params.id;
-            // *** MODIFICACIÓN AQUÍ: Capturar apellido e id_distrito y mapear a columnas de la tabla ***
-            const datosActualizados = {
-                nom_ven: req.body.nombre, // Mapea 'nombre' del formulario a 'nom_ven'
-                ape_ven: req.body.apellido, // Captura 'apellido' del formulario (NECESITA AGREGARSE AL FORMULARIO)
-                id_dis: req.body.id_distrito, // Captura 'id_distrito' del formulario (NECESITA AGREGARSE AL FORMULARIO)
-                cel_ven: req.body.telefono, // Mapea 'telefono' del formulario a 'cel_ven'
-                // 'direccion' y 'email' se eliminan ya que no están en la tabla Vendedores
-            };
-
-            await VendedorModel.actualizar(id, datosActualizados);
-            res.redirect('/vendedores');
-        } catch (error) {
-            console.error('Error en controlador al actualizar vendedor:', error);
-            res.status(500).render('error', { mensaje: 'Error al actualizar el vendedor' });
-        }
+// 5. Eliminar vendedor (sp_delven)
+exports.eliminarVendedor = async (req, res) => {
+    const { id_ven } = req.params; // Get ID from URL parameter
+     try {
+        // Use await with pool.query
+        await pool.query('CALL sp_delven(?)', [id_ven]);
+        res.redirect('/vendedores'); // Redirect after successful deletion
+    } catch (err) {
+        console.error("Error al eliminar vendedor:", err);
+        // Assuming you have an error view
+        res.render('vendedores/error', { mensaje: 'Error al eliminar vendedor', error: err });
+         // Or if using the error middleware: next(err);
     }
-
-    // Eliminar un vendedor
-    static async eliminarVendedor(req, res) {
-        try {
-            const id = req.params.id;
-            await VendedorModel.eliminar(id);
-            res.redirect('/vendedores');
-        } catch (error) {
-            console.error('Error en controlador al eliminar vendedor:', error);
-            res.status(500).render('error', { mensaje: 'Error al eliminar el vendedor' });
-        }
-    }
-
-    // Buscar vendedores
-    static async buscarVendedores(req, res) {
-        try {
-            const termino = req.query.termino;
-             // Asumiendo que el método buscar también considera el distrito si es relevante
-            const vendedores = await VendedorModel.buscar(termino);
-            res.render('vendedores/listar', { vendedores, termino });
-        } catch (error) {
-            console.error('Error en controlador al buscar vendedores:', error);
-            res.status(500).render('error', { mensaje: 'Error al buscar vendedores' });
-        }
-    }
-}
-
-module.exports = VendedorController;
+};

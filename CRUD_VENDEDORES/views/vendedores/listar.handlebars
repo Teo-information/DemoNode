@@ -1,49 +1,55 @@
 <h2>Lista de Vendedores</h2>
 
-<div class="row mb-4">
-  <div class="col-md-6">
-    <form action="/vendedores/buscar" method="GET" class="d-flex">
-      <input type="text" name="termino" class="form-control me-2" placeholder="Buscar por ID..." value="{{termino}}">
-      <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-  </div>
-  <div class="col-md-6 text-end">
-    <a href="/vendedores/crear" class="btn btn-success">Nuevo Vendedor</a>
-  </div>
-</div>
+{{!-- Search Form --}}
+<form action="/vendedores/buscar" method="POST">
+    <label for="id_ven">Buscar por ID:</label>
+    <input type="number" id="id_ven" name="id_ven">
+
+    <label for="nom_ven">Buscar por Nombre:</label>
+    <input type="text" id="nom_ven" name="nom_ven">
+
+    <button type="submit">Buscar</button>
+</form>
+
+<a href="/vendedores/crear">Crear Nuevo Vendedor</a>
 
 {{#if vendedores.length}}
-  <div class="table-responsive">
-    <table class="table table-striped table-hover">
-      <thead class="table-dark">
-        <tr>
-          <th>ID Vendedor</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Teléfono</th>
-          <th>ID Distrito</th>
-          <th>Celular</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each vendedores}}
-          <tr>
-            <td>{{id}}</td>
-            <td>{{nombre}}</td>
-            <td>{{direccion}}</td>
-            <td>{{telefono}}</td>
-            <td>{{email}}</td>
-            <td>
-              <a href="/vendedores/editar/{{id}}" class="btn btn-warning btn-sm">Editar</a>
-              <a href="/vendedores/eliminar/{{id}}" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este vendedor?')">Eliminar</a>
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Celular</th>
+                <th>Distrito</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each vendedores}}
+                <tr>
+                    <td>{{id_ven}}</td>
+                    <td>{{nom_ven}}</td>
+                    <td>{{ape_ven}}</td>
+                    <td>{{cel_ven}}</td>
+                    <td>{{nom_dis}}</td>
+                    <td>
+                        {{!-- Link to edit form --}}
+                        <a href="/vendedores/editar/{{id_ven}}">Editar</a>
+
+                        {{!-- Form to delete (using POST for simplicity) --}}
+                        <form action="/vendedores/eliminar/{{id_ven}}" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('¿Estás seguro de eliminar a {{nom_ven}}?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
     </table>
-  </div>
 {{else}}
-  <div class="alert alert-info">
-    No se encontraron vendedores{{#if termino}} para la búsqueda "{{termino}}"{{/if}}.
-  </div>
+    <p>No se encontraron vendedores.</p>
+{{/if}}
+
+{{#if mensajeError}}
+    <p style="color: red;">{{mensajeError}}</p>
 {{/if}}
